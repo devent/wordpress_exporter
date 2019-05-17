@@ -6,11 +6,10 @@ LABEL maintainer="Erwin Mueller <erwin.mueller@deventm.com>"
 # Set the Current Working Directory inside the container
 WORKDIR $GOPATH/src/wordpress_exporter
 
-# Copy everything from the current directory to the PWD(Present Working Directory) inside the container
+# Copy sources.
 COPY . .
 
-# Download all the dependencies
-# https://stackoverflow.com/questions/28031603/what-do-three-dots-mean-in-go-command-line-invocations
+# Download all the dependencies.
 RUN go get -d -v ./...
 
 # Install the package
@@ -33,4 +32,3 @@ RUN set -x \
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
 CMD ["wordpress_exporter"]
-
