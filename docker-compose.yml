@@ -3,8 +3,6 @@ version: '3.3'
 services:
    db:
      image: mysql:5.7
-     volumes:
-       - db_data:/var/lib/mysql
      ports:
        - "33306:3306"
      restart: always
@@ -18,8 +16,6 @@ services:
      depends_on:
        - db
      image: wordpress:latest
-     #volumes:
-     #  - ./docker_wordpress:/var/www/html
      ports:
        - "8000:80"
      restart: always
@@ -27,5 +23,17 @@ services:
        WORDPRESS_DB_HOST: db:3306
        WORDPRESS_DB_USER: wordpress
        WORDPRESS_DB_PASSWORD: wordpress1234
-volumes:
-    db_data:
+       WORDPRESS_DB_NAME: wordpress
+
+   wordpress_exporter:
+     depends_on:
+       - db
+     image: erwin82/wordpress_exporter:latest
+     ports:
+       - "8888:8888"
+     restart: always
+     environment:
+       WORDPRESS_DB_HOST: db
+       WORDPRESS_DB_USER: wordpress
+       WORDPRESS_DB_PASSWORD: wordpress1234
+       WORDPRESS_DB_NAME: wordpress
